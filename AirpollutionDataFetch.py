@@ -32,53 +32,62 @@ def getData(city):
     print('-', city)
     
     url = 'http://www.pm25.in/'+city
-
-    
-    html = requests.get(url,timeout=(120,180)) # getHtml 
+    index_headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'
+    }  
+    html = requests.get(url,headers = index_headers,timeout=(120,180)) # getHtml 
     html.encoding = 'utf-8'
     soup = BeautifulSoup(html.text, "html.parser")
 
-    updatetimefetch = soup.find('div',class_ = 'live_data_time')# updatetime fetch
-    timefetch = updatetimefetch.find('p')
-    time = timefetch.string
-    timenum = re.sub('\D','',time)# pure number time
-    date = timenum[0:8]
-    hour = timenum[8:10]
+    try:
+        updatetimefetch = soup.find('div',class_ = 'live_data_time')# updatetime fetch
+        timefetch = updatetimefetch.find('p')
+        time = timefetch.string
+        timenum = re.sub('\D','',time)# pure number time
+        date = timenum[0:8]
+        hour = timenum[8:10]
 
-    tablediv = soup.find('div',class_='table')    
+        citynamediv = soup.find('div',class_='city_name')
+        citynamefetch = citynamediv.find('h2')
+        cityname = citynamefetch.string
 
-    datalist = []
+        tablediv = soup.find('div',class_='table')    
 
-    for tr in tablediv.findAll('tr'):
-        for td in tr.findAll(['td']):
-            datalist.append(td.get_text())
+        datalist = []
 
-    table = chunks(datalist,11)
+        for tr in tablediv.findAll('tr'):
+            for td in tr.findAll(['td']):
+                datalist.append(td.get_text())
 
-    tb = DataFrame(table)
+        table = chunks(datalist,11)
 
-    tb.replace('_','NaN',inplace = True)# replace empty value as NaN
-    tb.replace(' ','NaN',inplace = True)
+        tb = DataFrame(table)
 
-    tb.columns = ['WatchPoint','AQI','Level','PrimaryPollution','PM2.5','PM10','CO','NO2','O3_1h','O3_8h','SO2']
+        tb.replace('_','NaN',inplace = True)# replace empty value as NaN
+        tb.replace(' ','NaN',inplace = True)
 
-    col_name = tb.columns.tolist()# add time to the table head
-    col_name.insert(0,'Date')
-    col_name.insert(1,'Hour')
-    tb = tb.reindex(columns=col_name)# add time list to the table
+        tb.columns = ['WatchPoint','AQI','Level','PrimaryPollution','PM2.5','PM10','CO','NO2','O3_1h','O3_8h','SO2']
 
-    dateList = [date for x in range(0,(tb.iloc[:,0].size))]# create time list
-    hourList = [hour for x in range(0,(tb.iloc[:,0].size))]
+        col_name = tb.columns.tolist()# add time to the table head
+        col_name.insert(0,'Date')
+        col_name.insert(1,'Hour')
+        tb = tb.reindex(columns=col_name)# add time list to the table
 
-    tb['Date'] = dateList
-    tb['Hour'] = hourList
+        dateList = [date for x in range(0,(tb.iloc[:,0].size))]# create time list
+        hourList = [hour for x in range(0,(tb.iloc[:,0].size))]
 
-    csvName = 'data/' + city + '.csv'
-    
-    if os.path.exists(csvName)==True:     # write csv with tablehead if no existing file
-        tb.to_csv(csvName, index = False, mode = 'a+',header = False)
-    else:
-        tb.to_csv(csvName,index = False, mode = 'a+')
+        tb['Date'] = dateList
+        tb['Hour'] = hourList
+
+        csvName = 'data/' + cityname + '.csv'
+
+        if os.path.exists(csvName)==True:     # write csv with tablehead if no existing file
+            tb.to_csv(csvName, index = False, mode = 'a+',header = False)
+        else:
+            tb.to_csv(csvName,index = False, mode = 'a+')
+    except BaseException:
+        file_write_obj = open("soup.txt", 'w')
+        file_write_obj.writelines(soup)
 
 
 # In[4]:
@@ -114,9 +123,12 @@ def reportIssue(issueMsg):
 
 if __name__ == '__main__':
     print('Started.')
-    time.sleep(1800)
+    #time.sleep(1800)
     url = 'http://www.pm25.in/'
-    html = requests.get(url) # getHtml 
+    index_headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'
+    }
+    html = requests.get(url,headers = index_headers) # getHtml 
     html.encoding = 'utf-8'
     soup = BeautifulSoup(html.text, "html.parser")
     namesdiv = soup.find('div',class_='all')
@@ -137,7 +149,7 @@ if __name__ == '__main__':
             try:
                 getData(namelist[i])
             except:
-                reportIssue(traceback.format_exc())
+                #reportIssue(traceback.format_exc())
                 traceback.print_exc(file=open('error.txt','a+'))
                 print(datetime.now(),' fail to get data of ',i,namelist[i])
         print('finish and sleep at ',datetime.now())
