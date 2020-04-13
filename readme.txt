@@ -26,4 +26,5 @@
 1.NationalAirRank.py为全国站点空气污染因子数据排名
 2.此代码从数据库中将当前时间前一小时的全国站点数据提取并根据因子数据进行排名，每个排名数值在每条站点数据后生成
 3.生成一个csv文件，文件名为日期加小时
-
+4.HistoryDataTransform.py读取历史数据的csv，将表格格式转换后直接导入数据库
+历史数据源https://pan.baidu.com/s/1I701jRwEeD577Wk-6-ulug#list/path=%2F，提取码zc9s
