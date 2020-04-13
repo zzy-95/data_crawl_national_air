@@ -95,7 +95,7 @@ def getData(link):
 
             print('Get data of '+cityname)
             flag = False
-            return dict_result[0]
+            return dict_result
         
         except BaseException:
             try_times+=1
@@ -151,7 +151,7 @@ def getProxy():# return new proxy ip
 
 if __name__ == '__main__':
     print('Started.')
-    time.sleep(1200)
+    time.sleep(3000)
     index_headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'   
     }
@@ -183,7 +183,9 @@ while True:
     start = datetime.now()
     for i in range(len(linklist)):
         try:
-            col.insert_one(getData(linklist[i]))
+            resultlist = getData(linklist[i])
+            for j in resultlist:
+            	col.insert_one(j)
         except:
             reportIssue(traceback.format_exc())
             traceback.print_exc(file=open('error.txt','a+'))
