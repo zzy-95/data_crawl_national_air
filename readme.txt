@@ -1,4 +1,4 @@
-1. 此爬虫即时从PM25.in网站上抓取全国所有站点数据（除去山南地区 此地区从2017年开始停止更新）
+1. 此爬虫AirPollutionDataFetch.py即时从PM25.in网站上抓取全国所有站点数据（除去山南地区 此地区从2017年开始停止更新）
 2. 此网站源数据整点更新，但网站数据更新时间不固定
 3. 数据输出格式为csv文件，按城市地区分开
 4. 每一个小时抓取一次数据，并存入现有文件中
@@ -12,3 +12,18 @@
 
 2020.4.2更新
 因需求将csv文件名从城市名拼音改为城市名中文
+
+2020.4.9
+因网站PM25.in持续宕机，AirPollutionDataFetch.py暂停运行
+
+2020.4.10
+1.新爬虫TempNationalAirData.py,与AirPollutionDataFetch.py基本相同，数据源网站为http://pm.kksk.org/。输出为csv文件
+2.MongoDBNationalAir.py和TempNationalAirData.py基本相同，输出数据导入服务器MongoDB数据库NationalAir，Collection为data，每个站点每小时数据为一个字典。
+为了配合后续排名的代码，空值从字符串‘NaN’改为np.nan（类型为float）。
+3.爬虫加入了代理IP池的功能，每次请求页面将从IP池里随机挑选一条IP作为代理IP
+
+2020.4.13
+1.NationalAirRank.py为全国站点空气污染因子数据排名
+2.此代码从数据库中将当前时间前一小时的全国站点数据提取并根据因子数据进行排名，每个排名数值在每条站点数据后生成
+3.生成一个csv文件，文件名为日期加小时
+
