@@ -53,31 +53,31 @@ def getData():
         newdf.loc[newdf['AQI'] == np.nan,['AQIrank'] ] = np.nan
 
         newdf = newdf.sort_values(by = 'PM25')
-        newdf['PM25rank'] = newdf.AQI.rank(method = 'min',na_option = 'keep',pct = True,ascending = True)
+        newdf['PM25rank'] = newdf.PM25.rank(method = 'min',na_option = 'keep',pct = True,ascending = True)
         newdf.loc[newdf['PM25'] == np.nan,['PM25rank'] ] = np.nan
 
         newdf = newdf.sort_values(by = 'PM10')
-        newdf['PM10rank'] = newdf.AQI.rank(method = 'min',na_option = 'keep',pct = True,ascending = True)
+        newdf['PM10rank'] = newdf.PM10.rank(method = 'min',na_option = 'keep',pct = True,ascending = True)
         newdf.loc[newdf['PM10'] == np.nan,['PM10rank'] ] = np.nan
 
         newdf = newdf.sort_values(by = 'CO')
-        newdf['COrank'] = newdf.AQI.rank(method = 'min',na_option = 'keep',pct = True,ascending = True)
+        newdf['COrank'] = newdf.CO.rank(method = 'min',na_option = 'keep',pct = True,ascending = True)
         newdf.loc[newdf['CO'] == np.nan,['COrank'] ] = np.nan
 
         newdf = newdf.sort_values(by = 'NO2')
-        newdf['NO2rank'] = newdf.AQI.rank(method = 'min',na_option = 'keep',pct = True,ascending = True)
+        newdf['NO2rank'] = newdf.NO2.rank(method = 'min',na_option = 'keep',pct = True,ascending = True)
         newdf.loc[newdf['NO2'] == np.nan,['NO2rank'] ] = np.nan
 
         newdf = newdf.sort_values(by = 'O3_1h')
-        newdf['O3_1hrank'] = newdf.AQI.rank(method = 'min',na_option = 'keep',pct = True,ascending = True)
+        newdf['O3_1hrank'] = newdf.O3_1h.rank(method = 'min',na_option = 'keep',pct = True,ascending = True)
         newdf.loc[newdf['O3_1h'] == np.nan,['O3_1hrank'] ] = np.nan
 
         newdf = newdf.sort_values(by = 'O3_8h')
-        newdf['O3_8hrank'] = newdf.AQI.rank(method = 'min',na_option = 'keep',pct = True,ascending = True)
+        newdf['O3_8hrank'] = newdf.O3_8h.rank(method = 'min',na_option = 'keep',pct = True,ascending = True)
         newdf.loc[newdf['O3_8h'] == np.nan,['O3_8hrank'] ] = np.nan
 
         newdf = newdf.sort_values(by = 'SO2')
-        newdf['SO2rank'] = newdf.AQI.rank(method = 'min',na_option = 'keep',pct = True,ascending = True)
+        newdf['SO2rank'] = newdf.SO2.rank(method = 'min',na_option = 'keep',pct = True,ascending = True)
         newdf.loc[newdf['SO2'] == np.nan,['SO2rank'] ] = np.nan
 
         if hour == 0:
